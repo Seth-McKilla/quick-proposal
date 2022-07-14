@@ -1,46 +1,30 @@
-import { QMainWindow, QWidget, QLabel, FlexLayout, QPushButton, QIcon } from '@nodegui/nodegui';
-import logo from '../assets/logox200.png';
+import {
+  QMainWindow,
+  QInputDialog,
+  QPushButton,
+  InputMode,
+} from "@nodegui/nodegui";
 
 const win = new QMainWindow();
-win.setWindowTitle("Hello World");
-
-const centralWidget = new QWidget();
-centralWidget.setObjectName("myroot");
-const rootLayout = new FlexLayout();
-centralWidget.setLayout(rootLayout);
-
-const label = new QLabel();
-label.setObjectName("mylabel");
-label.setText("Hello");
 
 const button = new QPushButton();
-button.setIcon(new QIcon(logo));
+button.setText("Click me");
+button.addEventListener("clicked", () => {
+  console.log("the button was clicked");
+});
 
-const label2 = new QLabel();
-label2.setText("World");
-label2.setInlineStyle(`
-  color: red;
-`);
+const input = new QInputDialog();
+input.setLabelText("Project Name");
+input.setInputMode(InputMode.TextInput);
+input.setTextValue("");
+input.setOkButtonText("Create");
+input.setCancelButtonText("Cancel");
+input.addEventListener("accepted", () => {
+  console.log(input.textValue());
+});
 
-rootLayout.addWidget(label);
-rootLayout.addWidget(button);
-rootLayout.addWidget(label2);
-win.setCentralWidget(centralWidget);
-win.setStyleSheet(
-  `
-    #myroot {
-      background-color: #009688;
-      height: '100%';
-      align-items: 'center';
-      justify-content: 'center';
-    }
-    #mylabel {
-      font-size: 16px;
-      font-weight: bold;
-      padding: 1;
-    }
-  `
-);
+win.setWindowTitle("Proposal Creation Wizard");
+win.setCentralWidget(button);
+win.setCentralWidget(input);
 win.show();
-
 (global as any).win = win;
